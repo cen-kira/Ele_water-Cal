@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>水电费计算</title>
+    <style>
+        #box{
+            margin: 0 auto;
+        }
+        .modal {
+    display: none; /* 默认隐藏 */
+    position: fixed; /* 固定定位 */
+    z-index: 1; /* 设置在顶层 */
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%;
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+}
+/* 弹窗内容 */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; 
+}
+/* 关闭按钮 */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+ 
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+    </style>
+   
+</head>
+<body>
+    <div id="box">
+        <fieldset style="width: 500px;margin: 0 auto;">
+            <legend style="text-align: center;">水电费计算</legend>
+            上个月电表数：<input type="text" id="lst_e"/><br> 
+            上个月水表数：<input type="text" id="lst_w" /><br>
+            本月电表数：<input type="text" id="this_e" /><br>
+            本月水表数：<input type="text" id="this_w" /><br>
+            本月总电费：<input type="text" /><br>
+            本月总水费：<input type="text" /><br>
+            楼上电费：<button id="up-ele" onclick="up_ecost()">点这里获取</button>
+           
+               
+        </fieldset>
+    </div>
+     <script>
+        const unit_w = 0.88;
+        const unit_e = 0.86;
+                
+        function up_ecost(){
+            var m2 = document.getElementById("this_e").value;
+            var m1 = document.getElementById("lst_e").value;
+
+            var up_eleCost =(Number(m2)-Number(m1))*unit_e;
+           // console.log(up_eleCost);
+            alert("楼上的电费是："+up_eleCost);
+        }
+    </script>
+</body>
+</html>
