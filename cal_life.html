@@ -5,71 +5,123 @@
     <title>水电费计算</title>
     <style>
         #box{
-            margin: 0 auto;
+            width: 1300px;
         }
-        .modal {
-    display: none; /* 默认隐藏 */
-    position: fixed; /* 固定定位 */
-    z-index: 1; /* 设置在顶层 */
-    left: 0;
-    top: 0;
-    width: 100%; 
-    height: 100%;
-    overflow: auto; 
-    background-color: rgb(0,0,0); 
-    background-color: rgba(0,0,0,0.4); 
-}
-/* 弹窗内容 */
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; 
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; 
-}
-/* 关闭按钮 */
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
- 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
+        #box1{
+            width: 500px;
+            height: 400px;
+            float: left;
+        }
+        #box2{
+            width: 400px;
+            height: 400px;
+            float: left;
+        }
+        #box3{
+            width: 400px;
+            height: 400px;
+            float: left;
+        }
+        #up-cost{
+           margin-left: 150px;
+           margin-top: 90px;
+        }
+       #down-cost{
+        margin-left: 39px;
+           margin-top: 90px;
+       }
     </style>
    
 </head>
 <body>
-    <div id="box">
-        <fieldset style="width: 500px;margin: 0 auto;">
+<div id="box">
+    <div id="box1">
+        <fieldset style="height: 400px;">
             <legend style="text-align: center;">水电费计算</legend>
             上个月电表数：<input type="text" id="lst_e"/><br> 
             上个月水表数：<input type="text" id="lst_w" /><br>
             本月电表数：<input type="text" id="this_e" /><br>
             本月水表数：<input type="text" id="this_w" /><br>
-            本月总电费：<input type="text" /><br>
-            本月总水费：<input type="text" /><br>
-            楼上电费：<button id="up-ele" onclick="up_ecost()">点这里获取</button>
-           
+            本月总电费：<input type="text"  id="total_e" /><br>
+            本月总水费：<input type="text" id="total_w" /><br>
+            <button id="up-cost" onclick="up_cost()">楼上水电费</button>
+            <button id="down-cost" onclick="down_cost()">楼下水电费</button>
                
         </fieldset>
     </div>
+    <div id="box2">
+        <fieldset style="height: 400px;">
+            <legend style="text-align: center;">楼上水电费计算结果</legend>
+            <div>
+            楼上电费：<span id="up_ele"></span><br>
+            楼上水费：<span id="up_wat"></span><br>
+            楼上总费用：<span id="up_total"></span><br>
+            </div>
+        </fieldset>
+    </div>
+    <div id="box3">
+        <fieldset style="height: 400px;">
+            <legend style="text-align: center;">楼下水电费计算结果</legend>
+            楼下电费：<span id="down_ele"></span><br>
+            楼下水费：<span id="down_wat"></span><br>
+            楼下总费用：<span id="down_total"></span><br>
+        </fieldset>
+    </div>
+</div>
      <script>
         const unit_w = 0.88;
         const unit_e = 0.86;
                 
-        function up_ecost(){
+        function up_cost(){
+            /*
+            var box2 = document.getElementById("box2");
+            var box3 = document.getElementById("box3");
+            box2.style.display="block";
+            box3.style.display="block";
+            */
+            /* 楼上电费 */
             var m2 = document.getElementById("this_e").value;
             var m1 = document.getElementById("lst_e").value;
-
+            var up_ele = document.getElementById("up_ele");
             var up_eleCost =(Number(m2)-Number(m1))*unit_e;
+            up_eleCost = up_eleCost.toFixed(2);
+            up_ele.innerHTML = up_eleCost+"元";
            // console.log(up_eleCost);
-            alert("楼上的电费是："+up_eleCost);
+
+           /* 楼上水费 */
+            var n2 = document.getElementById("this_w").value;
+            var n1 = document.getElementById("lst_w").value;
+            var up_wat = document.getElementById("up_wat");
+            var up_watCost =(Number(n2)-Number(n1))*unit_w;
+            up_wat.innerHTML = up_watCost+"元";
+            var total_up = up_eleCost+up_watCost;
+            total_up = parseInt(total_up).toFixed(2);
+
+            up_total.innerHTML = total_up+"元";
+           // alert("楼上的电费是："+up_eleCost+"元\n楼上的水费是："+up_watCost+"元"+"\n楼上的总费用是："+total_up+"元");
+            
+        }
+        function down_cost(){
+            /* 楼下电费 */
+            var m2 = document.getElementById("this_e").value;
+            var m1 = document.getElementById("lst_e").value;
+            var total_e = document.getElementById("total_e").value;
+            var down_ele = document.getElementById("down_ele");
+            var down_eleCost =Number(total_e)-(Number(m2)-Number(m1))*unit_e;
+            down_eleCost = down_eleCost.toFixed(2);
+            down_ele.innerHTML = down_eleCost+"元";
+           // console.log(up_eleCost);
+           /* 楼下水费 */
+            var n2 = document.getElementById("this_w").value;
+            var n1 = document.getElementById("lst_w").value;
+            var total_w = document.getElementById("total_w").value;
+            var down_wat = document.getElementById("down_wat");
+            var down_watCost =Number(total_w)-(Number(n2)-Number(n1))*unit_w;
+            down_watCost = parseInt(down_watCost).toFixed(2);
+            down_wat.innerHTML = down_watCost+"元";
+            var total_down = down_eleCost+down_watCost;
+            total_down = parseInt(total_down).toFixed(2);
+            down_total.innerHTML = total_down+"元";
         }
     </script>
 </body>
