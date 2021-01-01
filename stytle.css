@@ -1,0 +1,52 @@
+#box {
+    width: 1300px;
+    height: 100%;
+    margin: 0 auto;
+}
+
+#box1 {
+    width: 500px;
+    height: 350px;
+    float: left;
+
+}
+
+#box2 {
+    width: 280px;
+    height: 180px;
+
+}
+
+#box3 {
+    width: 280px;
+    height: 180px;
+    padding-top: 18px;
+}
+
+#Mybox_rel {
+    width: 280px;
+    height: 400px;
+    margin-left: 50px;
+    float: left;
+    margin-top: 0px;
+
+}
+
+#cost {
+    margin-top: 30px;
+    margin-left: 190px;
+}
+
+
+#main {
+    width: 780px;
+    height: 550px;
+    top: 450px;
+    left: 180px;
+
+}
+
+#pie {
+    width: 300px;
+    height: 300px;
+}

@@ -5,284 +5,52 @@
     <meta charset="utf-8">
     <title>水电费计算</title>
     <script src="E:\software\VSCode\echart.min.js\echarts.min.js"></script>
-    <style>
-        #box {
-            width: 1300px;
-        }
-
-        #box1 {
-            width: 500px;
-            height: 400px;
-            float: left;
-        }
-
-        #box2 {
-            width: 400px;
-            height: 400px;
-            float: left;
-        }
-
-        #box3 {
-            width: 400px;
-            height: 400px;
-            float: left;
-        }
-
-        #up-cost {
-            margin-left: 150px;
-            margin-top: 90px;
-        }
-
-        #down-cost {
-            margin-left: 39px;
-            margin-top: 90px;
-        }
-
-        #main {
-            width: 900px;
-            height: 700px;
-            top: 650px;
-            left: 180px;
-
-        }
-    </style>
+    <script src="func.js"></script>
+    <link rel="stylesheet" type="text/css" href="stytle.css">
 
 </head>
 
 <body>
     <div id="box">
         <div id="box1">
-            <fieldset style="height: 400px;">
+            <fieldset style="height: 350px;">
                 <legend style="text-align: center;">水电费计算</legend>
-                上个月电表数：<input type="text" id="lst_e" /><br>
-                上个月水表数：<input type="text" id="lst_w" /><br>
-                本月电表数：<input type="text" id="this_e" /><br>
-                本月水表数：<input type="text" id="this_w" /><br>
-                本月总电费：<input type="text" id="total_e" /><br>
+                上个月电表数：<input type="text" id="lst_e" /><br><br>
+                上个月水表数：<input type="text" id="lst_w" /><br><br>
+                本月电表数：<input type="text" id="this_e" /><br><br>
+                本月水表数：<input type="text" id="this_w" /><br><br>
+                本月总电费：<input type="text" id="total_e" /><br><br>
                 本月总水费：<input type="text" id="total_w" /><br>
-                <button id="cost" onclick="run()">水电费概览</button>
-
+                <button id="cost" onclick="begin()">水电费概览</button>
+                <!--
                 <button id="down-cost1" onclick="begin()">test</button>
+                -->
             </fieldset>
         </div>
-        <div id="box2">
-            <fieldset style="height: 400px;">
-                <legend style="text-align: center;">楼上水电费计算结果</legend>
-                <div>
-                    楼上电费：<span id="up_ele"></span><br>
-                    楼上水费：<span id="up_wat"></span><br>
-                    楼上总费用：<span id="up_total"></span><br>
-                </div>
-            </fieldset>
-        </div>
-        <div id="box3">
-            <fieldset style="height: 400px;">
-                <legend style="text-align: center;">楼下水电费计算结果</legend>
-                楼下电费：<span id="down_ele"></span><br>
-                楼下水费：<span id="down_wat"></span><br>
-                楼下总费用：<span id="down_total"></span><br>
-            </fieldset>
-        </div>
+        <div id="Mybox_rel">
+            <div id="box2">
+                <fieldset style="height: 150px;">
+                    <legend style="text-align: center;">楼上水电费计算结果</legend>
+                    <div>
+                        楼上电费：<span id="up_ele"></span><br><br>
+                        楼上水费：<span id="up_wat"></span><br><br>
+                        楼上总费用：<span id="up_total"></span><br>
+                    </div>
+                </fieldset>
+            </div>
+            <div id="box3">
+                <fieldset style="height: 150px;">
+                    <legend style="text-align: center;">楼下水电费计算结果</legend>
+                    楼下电费：<span id="down_ele"></span><br><br>
+                    楼下水费：<span id="down_wat"></span><br><br>
+                    楼下总费用：<span id="down_total"></span><br>
+                </fieldset>
+            </div>
 
+        </div>
+        <div id="main"></div>
+       
     </div>
-    <div id="main">
-
-    </div>
-    <script>
-        const unit_w = 0.88;
-        const unit_e = 0.86;
-
-
-        function up_cost() {
-            var val = getValue();
-           
-            var up_eleCost = (Number(val.this_e) - Number(val.lst_e)) * unit_e;
-            var up_ele = document.getElementById("up_ele");
-            up_eleCost = parseFloat(up_eleCost.toFixed(2));
-            console.log(up_eleCost);
-            up_ele.innerHTML = up_eleCost + "元";
-        
-            var up_watCost = (Number(val.this_w) - Number(val.lst_w)) * unit_w;
-            up_wat = document.getElementById("up_wat");
-            up_wat.innerHTML = up_watCost + "元";
-            
-            var total_up = up_eleCost + up_watCost;
-            total_up = parseFloat(total_up.toFixed(2));
-            var up_total = document.getElementById("up_total");
-            up_total.innerHTML = total_up + "元";
-            
-            var up= {
-                up_eleCost:up_eleCost,
-                up_watCost:up_watCost,
-                total_up:total_up
-            };
-            
-            return up;
-            
-         }
-        
-        function down_cost() { 
-            var val = getValue();
-            var up = up_cost();
-            
-            var down_ele = document.getElementById("down_ele");
-
-            var down_eleCost = Number(val.total_e) - Number(up.up_eleCost);
-            console.log(down_eleCost);
-
-            down_eletCost = parseInt(down_eleCost).toFixed(2);
-            down_ele.innerHTML = down_eleCost + "元";
-
-            var down_wat = document.getElementById("down_wat");
-            var down_watCost = Number(val.total_w) -Number(up.up_watCost);
-            down_watCost = parseInt(down_watCost).toFixed(2);
-            down_wat.innerHTML = down_watCost + "元";
-
-            var total_down = Number(down_eleCost)+Number(down_watCost);
-            //total_down = parseInt(total_down).toFixed(2);
-            var down_total = document.getElementById("down_total");
-            down_total.innerHTML = total_down + "元";
-
-            var down = {
-                down_eleCost:down_eleCost,
-                down_watCost:down_watCost,
-                down_total:down_total
-            };
-            return down;
-
-        }
-
-        function getValue(){
-            var m2 = document.getElementById("this_e").value;
-            var m1 = document.getElementById("lst_e").value;
-            var n2 = document.getElementById("this_w").value;
-            var n1 = document.getElementById("lst_w").value;
-            var m = document.getElementById("total_e").value;
-            var n = document.getElementById("total_w").value;
-            var a = {
-                this_e:m2,
-                lst_e:m1,
-                this_w:n2,
-                lst_w:n1,
-                total_e:m,
-                total_w:n
-            };
-            return a;
-        }
-        
-        function begin(){
-            var c = getValue();
-            var rel= isNotANumber();
-            if(rel){
-                alert("请输入数字！");
-            }else{
-                up_cost();
-                down_cost();
-                getData();
-            }
-            
-            
-           
-        }
-        
-             
-
-
-           
-
-        
-
-
-        function isNotANumber() {
-          var val = getValue();
-            if (parseFloat(val.lst_e).toString() == "NaN" 
-            || parseFloat(val.this_e).toString() == "NaN" 
-            || parseFloat(val.lst_w).toString() == "NaN" 
-            || parseFloat(val.this_w).toString() == "NaN"
-            || parseFloat(val.total_w).toString() == "NaN"
-            || parseFloat(val.total_e).toString() == "NaN") {
-
-                return true;
-            } else{
-                return false;
-            }
-            
-            
-
-                
-        }
-       /* 
-        var a = isNotANumber();
-        console.log(typeof(a.m1));
-        console.log(a.m1);
-*/
-
-
-        /*
-        第一步，获得数据
-        */
-        function getData() {
-            var u = up_cost();
-            var d = down_cost();
-            var up_arr = [Number(u.up_eleCost),Number(u.up_watCost),Number(u.total_up)];
-            var down_arr = [Number(d.down_eleCost),Number(d.down_watCost),Number(d.down_total)];
-            setData(up_arr,down_arr);
-            return up_arr,down_arr;
-
-        }
-        /*
-        第二步，将数据交给图形
-        */
-        function setData(up_arr,down_arr) {
-            var myChart = echarts.init(document.getElementById('main'));
-            var option = {
-                title: {
-                    text: '水电费计算'
-                },
-                tooltip: {},
-                legend: {
-                    data: ['费用']
-                },
-                xAxis: {
-                    data: ["楼上电费", "楼上水费", "楼上总费用", "楼下电费", "楼下水费", "楼下总费用"]
-                },
-                yAxis: {
-                    name: "费用（元）",
-                    type: 'value',
-                    axisLine: {
-                        show: true
-                    }
-                },
-                series: [{
-                    name: '楼上',
-                    type: 'line',
-                    data: up_arr
-
-                },
-                {
-                    name: '楼下',
-                    type: 'line',
-                    data: down_arr
-                }
-            ]
-
-            };
-
-
-            myChart.setOption(option);
-        }
-        /*
-        第三步，执行
-        */
-       /*
-        function run(data) {
-            var data = getData();
-            console.log(data);
-            setData(data);
-            return data;
-        }
-        */
-    </script>
 </body>
 
 </html>
