@@ -1,7 +1,6 @@
 const unit_w = 0.88;
 const unit_e = 0.86;
 
-
 function up_cost() {
     var val = getValue();
 
@@ -37,7 +36,7 @@ function down_cost() {
     var down_ele = document.getElementById("down_ele");
 
     var down_eleCost = Number(val.total_e) - Number(up.up_eleCost);
-    
+
     down_eletCost = parseInt(down_eleCost).toFixed(2);
     down_ele.innerHTML = down_eleCost + "元";
 
@@ -67,6 +66,7 @@ function getValue() {
     var n1 = document.getElementById("lst_w").value;
     var m = document.getElementById("total_e").value;
     var n = document.getElementById("total_w").value;
+
     var a = {
         this_e: m2,
         lst_e: m1,
@@ -75,34 +75,75 @@ function getValue() {
         total_e: m,
         total_w: n
     };
+
     return a;
 }
 
 function begin() {
-    var c = getValue();
-    var rel = isNotANumber();
-    if (rel) {
-        alert("请输入数字！");
-    } else {
-        up_cost();
-        down_cost();
-        getData();
-    }
+    getValue();
+    isNotANumber();
+
+
+
 
 }
 
+function getTipId() {
+    var tip = [];
+    for (var i = 0; i < 6; i++) {
+        var tipi = document.getElementsByTagName('span')[i].getAttribute('id');
+
+        tip.push(tipi);
+    }
+    //console.log(tip);
+    return tip;
+}
+
+function test() {
+    var tipId = getTipId();
+
+
+    var tip1 = document.getElementById(tipId[0]);
+    tip1.innerHTML = "请输入数字";
+
+
+    // console.log(tipId[0]);
+
+}
 function isNotANumber() {
     var val = getValue();
-    if (parseFloat(val.lst_e).toString() == "NaN"
-        || parseFloat(val.this_e).toString() == "NaN"
-        || parseFloat(val.lst_w).toString() == "NaN"
-        || parseFloat(val.this_w).toString() == "NaN"
-        || parseFloat(val.total_w).toString() == "NaN"
-        || parseFloat(val.total_e).toString() == "NaN") {
+    var tipId = getTipId();
+    //console.log(tipId[0]);
+    //console.log(val.lst_e);
+    var relas =
+    {
+        tip1: val.lst_e,
+        tip2: val.lst_w,
+        tip3: val.this_e,
+        tip4: val.this_w,
+        tip5: val.total_e,
+        tip6: val.total_w
+    }
+        ;
+    console.log(relas.tip2);
+    for (var v  in relas) {
+        var tip = document.getElementById(v);
+        //console.log(relas[v]);
+        if (parseFloat(relas[v]).toString() == "NaN") {
 
-        return true;
-    } else {
-        return false;
+            
+            tip.innerHTML = "请输入数字";
+
+
+
+        } else {
+            up_cost();
+            down_cost();
+            getData();
+            
+        }
+
+        // console.log(val[v]);
     }
 }
 
