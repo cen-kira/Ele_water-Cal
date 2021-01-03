@@ -59,40 +59,63 @@ function down_cost() {
 
 }
 
-function getValue() {
-    var m2 = document.getElementById("this_e").value;
-    var m1 = document.getElementById("lst_e").value;
-    var n2 = document.getElementById("this_w").value;
-    var n1 = document.getElementById("lst_w").value;
-    var m = document.getElementById("total_e").value;
-    var n = document.getElementById("total_w").value;
+function getInputIds() {
+    var ids = [];
+    for (var i = 0; i < 6; i++) {
+        var id = document.getElementsByClassName('input')[i].getAttribute('id');
+        ids.push(id);
+    }
+    //console.log(tip);
+    return ids;
+}
 
-    var a = {
-        this_e: m2,
-        lst_e: m1,
-        this_w: n2,
-        lst_w: n1,
-        total_e: m,
-        total_w: n
-    };
+function getValue(this_e, lst_e, this_w, lst_w, total_e, total_w) {
+    var this_e = document.getElementById("this_e").value;
+    var lst_e = document.getElementById("lst_e").value;
+    var this_w = document.getElementById("this_w").value;
+    var lst_w = document.getElementById("lst_w").value;
+    var total_e = document.getElementById("total_e").value;
+    var total_w = document.getElementById("total_w").value;
+    /*
+        var value = {
+            this_e: this_e,
+            lst_e: lst_e,
+            this_w: this_w,
+            lst_w: lst_w,
+            total_e: total_e,
+            total_w: total_w
+        };
+        */
 
-    return a;
+    return this_e, lst_e, this_w, lst_w, total_e, total_w;
 }
 
 function begin() {
-    getValue();
-    isNotANumber();
+    reset();
+    var rel = checks();
+    // getValue();
+    // var tipId = getTipId();
+    // var rel = isNotANumber(lst_e);
 
+    if (rel) {
+        up_cost();
+        down_cost();
+        getData();
+    }
 
+}
 
-
+function reset() {
+    var tipIds = getTipId();
+    for (var i = 0; i < tipIds.length; i++) {
+        clearInputWarn(tipIds[i]);
+    }
 }
 
 function getTipId() {
     var tip = [];
     for (var i = 0; i < 6; i++) {
         var tipi = document.getElementsByTagName('span')[i].getAttribute('id');
-
         tip.push(tipi);
     }
     //console.log(tip);
@@ -110,42 +133,41 @@ function test() {
     // console.log(tipId[0]);
 
 }
-function isNotANumber() {
-    var val = getValue();
-    var tipId = getTipId();
-    //console.log(tipId[0]);
-    //console.log(val.lst_e);
-    var relas =
-    {
-        tip1: val.lst_e,
-        tip2: val.lst_w,
-        tip3: val.this_e,
-        tip4: val.this_w,
-        tip5: val.total_e,
-        tip6: val.total_w
+function isNotANumber(this_e, lst_e, this_w, lst_w, total_e, total_w) {
+    //var val = getValue();
+
+    //console.log(val[v]);
+
+    //console.log(val.v);
+    if (parseFloat(lst_e).toString() == "NaN") {
+
+        return true
+
     }
-        ;
-    console.log(relas.tip2);
-    for (var v  in relas) {
-        var tip = document.getElementById(v);
-        //console.log(relas[v]);
-        if (parseFloat(relas[v]).toString() == "NaN") {
 
-            
-            tip.innerHTML = "请输入数字";
+    else {
+        return false;
+    }
 
 
+}
+function lst_w() {
+    var val = getValue();
 
-        } else {
-            up_cost();
-            down_cost();
-            getData();
-            
-        }
+    //console.log(val[v]);
 
-        // console.log(val[v]);
+    //console.log(val.v);
+    if (parseFloat(val.lst_w).toString() == "NaN") {
+
+        return true
+
+    }
+
+    else {
+        return false;
     }
 }
+
 
 /*
 第一步，获得数据
@@ -210,4 +232,41 @@ function setData(up_arr, down_arr) {
 
     myChart.setOption(option);
 
+}
+
+function checks() {
+    var ids = getInputIds();
+    var isSuccess = true;
+    for (var i = 0; i < ids.length; i++) {
+        var success = check(ids[i]);
+        if (!success) {
+            isSuccess = false;
+        }
+    }
+    return isSuccess;
+}
+
+function check(inputId) {
+    var val = document.getElementById(inputId).value;
+    if (!isNum(val)) {
+        inputWarn(inputId + "_tip");
+        return false;
+    }
+    return true;
+}
+
+function inputWarn(inputId) {
+    document.getElementById(inputId).innerHTML = "请输入数字";
+}
+
+function clearInputWarn(inputId) {
+    var tip = document.getElementById(inputId);
+    tip.innerHTML = "";
+}
+
+function isNum(val) {
+    if (val == null || val.trim() == '') {
+        return false;
+    }
+    return !isNaN(val);
 }
