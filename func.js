@@ -58,115 +58,82 @@ function down_cost() {
     return down;
 
 }
-
-function getInputIds() {
-    var ids = [];
-    for (var i = 0; i < 6; i++) {
-        var id = document.getElementsByClassName('input')[i].getAttribute('id');
-        ids.push(id);
+function getInputId() {
+    var inpIds = [];
+    for (var i = 0;i<6;i++){
+        var inpId = document.getElementsByClassName('input')[i].getAttribute('id');
+        inpIds.push(inpId);
     }
-    //console.log(tip);
-    return ids;
+    return inpIds;
+        
+
+}
+function getTipId() {
+    var tipIds = [];
+    for (var i = 0;i<6;i++){
+        var tipId = document.getElementsByTagName('span').getAttribute('id');
+        tipIds.push(tipId);
+    }
+    return tipIds;
 }
 
-function getValue(this_e, lst_e, this_w, lst_w, total_e, total_w) {
-    var this_e = document.getElementById("this_e").value;
-    var lst_e = document.getElementById("lst_e").value;
-    var this_w = document.getElementById("this_w").value;
-    var lst_w = document.getElementById("lst_w").value;
-    var total_e = document.getElementById("total_e").value;
-    var total_w = document.getElementById("total_w").value;
-    /*
-        var value = {
-            this_e: this_e,
-            lst_e: lst_e,
-            this_w: this_w,
-            lst_w: lst_w,
-            total_e: total_e,
-            total_w: total_w
-        };
-        */
+function checkValues() {
+    var inpIds = getInputId();
+    for(var i = 0;i<inpIds.length;i++){
+        var success = checkPerVal(inpIds[i]);
+        if(!success){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    
 
-    return this_e, lst_e, this_w, lst_w, total_e, total_w;
+}
+function checkPerVal(inpId) {
+    var inpIds= getInputId();
+    
+    for (var i = 0; i < inpId.length; i++) {
+        var inpId = document.getElementById(inpIds[i]);
+        var val = inpId.value;
+        
+        if(!isNum(val)){
+            warnTip(inpId);
+        }else{
+            clearWarnTip(inpId+'_tip');
+        }
+        return true;
+        
+    }
+}
+function isNum(val) {
+    if(val==null||val.trim()==''){
+        return false;
+    }else{
+        return true;
+    }
+}
+function warnTip(inpId) {
+  
+        inpId.innerHTML="请输入数字";
+        
+    }
+
+function clearWarnTip(id) {
+    var tipId = document.getElementById(id);
+    tipId.innerHTML = "";
 }
 
-function begin() {
-    reset();
-    var rel = checks();
-    // getValue();
-    // var tipId = getTipId();
-    // var rel = isNotANumber(lst_e);
-
-    if (rel) {
+function begin(){
+    var rel = checkValues();
+    if(rel){
         up_cost();
-        down_cost();
+        down_cost;
         getData();
     }
-
 }
 
-function reset() {
-    var tipIds = getTipId();
-    for (var i = 0; i < tipIds.length; i++) {
-        clearInputWarn(tipIds[i]);
-    }
-}
 
-function getTipId() {
-    var tip = [];
-    for (var i = 0; i < 6; i++) {
-        var tipi = document.getElementsByTagName('span')[i].getAttribute('id');
-        tip.push(tipi);
-    }
-    //console.log(tip);
-    return tip;
-}
-
-function test() {
-    var tipId = getTipId();
-
-
-    var tip1 = document.getElementById(tipId[0]);
-    tip1.innerHTML = "请输入数字";
-
-
-    // console.log(tipId[0]);
-
-}
-function isNotANumber(this_e, lst_e, this_w, lst_w, total_e, total_w) {
-    //var val = getValue();
-
-    //console.log(val[v]);
-
-    //console.log(val.v);
-    if (parseFloat(lst_e).toString() == "NaN") {
-
-        return true
-
-    }
-
-    else {
-        return false;
-    }
-
-
-}
-function lst_w() {
-    var val = getValue();
-
-    //console.log(val[v]);
-
-    //console.log(val.v);
-    if (parseFloat(val.lst_w).toString() == "NaN") {
-
-        return true
-
-    }
-
-    else {
-        return false;
-    }
-}
 
 
 /*
@@ -232,41 +199,4 @@ function setData(up_arr, down_arr) {
 
     myChart.setOption(option);
 
-}
-
-function checks() {
-    var ids = getInputIds();
-    var isSuccess = true;
-    for (var i = 0; i < ids.length; i++) {
-        var success = check(ids[i]);
-        if (!success) {
-            isSuccess = false;
-        }
-    }
-    return isSuccess;
-}
-
-function check(inputId) {
-    var val = document.getElementById(inputId).value;
-    if (!isNum(val)) {
-        inputWarn(inputId + "_tip");
-        return false;
-    }
-    return true;
-}
-
-function inputWarn(inputId) {
-    document.getElementById(inputId).innerHTML = "请输入数字";
-}
-
-function clearInputWarn(inputId) {
-    var tip = document.getElementById(inputId);
-    tip.innerHTML = "";
-}
-
-function isNum(val) {
-    if (val == null || val.trim() == '') {
-        return false;
-    }
-    return !isNaN(val);
 }
