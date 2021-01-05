@@ -2,8 +2,15 @@ const unit_w = 0.88;
 const unit_e = 0.86;
 
 function up_cost() {
-    var val = getValue();
-
+    var inpIds = getInputId();
+    var val = {
+        lst_e: document.getElementById(inpIds[0]).value,
+        lst_w: document.getElementById(inpIds[1]).value,
+        this_e: document.getElementById(inpIds[2]).value,
+        this_w: document.getElementById(inpIds[3]).value,
+        total_e: document.getElementById(inpIds[4]).value,
+        total_w: document.getElementById(inpIds[5]).value
+    };
     var up_eleCost = (Number(val.this_e) - Number(val.lst_e)) * unit_e;
     var up_ele = document.getElementById("up_ele");
     up_eleCost = parseFloat(up_eleCost.toFixed(2));
@@ -30,7 +37,15 @@ function up_cost() {
 }
 
 function down_cost() {
-    var val = getValue();
+    var inpIds = getInputId();
+    var val = {
+        lst_e: document.getElementById(inpIds[0]).value,
+        lst_w: document.getElementById(inpIds[1]).value,
+        this_e: document.getElementById(inpIds[2]).value,
+        this_w: document.getElementById(inpIds[3]).value,
+        total_e: document.getElementById(inpIds[4]).value,
+        total_w: document.getElementById(inpIds[5]).value
+    };
     var up = up_cost();
 
     var down_ele = document.getElementById("down_ele");
@@ -58,19 +73,21 @@ function down_cost() {
     return down;
 
 }
+
 function getInputId() {
     var inpIds = [];
-    for (var i = 0;i<6;i++){
+    for (var i = 0; i < 6; i++) {
         var inpId = document.getElementsByClassName('input')[i].getAttribute('id');
         inpIds.push(inpId);
     }
     return inpIds;
-        
+
 
 }
+
 function getTipId() {
     var tipIds = [];
-    for (var i = 0;i<6;i++){
+    for (var i = 0; i < 6; i++) {
         var tipId = document.getElementsByTagName('span').getAttribute('id');
         tipIds.push(tipId);
     }
@@ -79,54 +96,60 @@ function getTipId() {
 
 function checkValues() {
     var inpIds = getInputId();
-    for(var i = 0;i<inpIds.length;i++){
+    var isSuccess = true;
+    for (var i = 0; i < inpIds.length; i++) {
         var success = checkPerVal(inpIds[i]);
-        if(!success){
-            return false;
-        }else{
-            return true;
+        if (!success) {
+            isSuccess = false;
         }
+
+
     }
-    
+    return isSuccess;
 
 }
+
 function checkPerVal(inpId) {
-    var inpIds= getInputId();
-    
-    for (var i = 0; i < inpId.length; i++) {
-        var inpId = document.getElementById(inpIds[i]);
-        var val = inpId.value;
-        
-        if(!isNum(val)){
-            warnTip(inpId);
-        }else{
-            clearWarnTip(inpId+'_tip');
-        }
-        return true;
-        
-    }
-}
-function isNum(val) {
-    if(val==null||val.trim()==''){
+
+    var val = document.getElementById(inpId).value;
+    console.log(val);
+    if (!isNum(val)) {
+
+        warnTip(inpId);
         return false;
-    }else{
+    } else {
+
+        clearWarnTip(inpId);
         return true;
     }
+
 }
-function warnTip(inpId) {
-  
-        inpId.innerHTML="请输入数字";
-        
+
+
+function isNum(val) {
+    if (val == null || val.trim() == '') {
+        return false;
+    } else {
+        return !isNaN(val);
     }
+}
+
+function warnTip(inpId) {
+
+    var tipId = inpId + "_tip";
+    document.getElementById(tipId).innerHTML = "请输入数字";
+
+
+}
 
 function clearWarnTip(id) {
-    var tipId = document.getElementById(id);
+    var tipId = document.getElementById(id + '_tip');
     tipId.innerHTML = "";
 }
 
-function begin(){
+function begin() {
     var rel = checkValues();
-    if(rel){
+    if (rel) {
         up_cost();
         down_cost;
         getData();
@@ -188,9 +211,14 @@ function setData(up_arr, down_arr) {
                 show: true
             }
         },
-        series: [
-            { type: 'bar', barWidth: 40 },
-            { type: 'bar', barWidth: 40 }
+        series: [{
+            type: 'bar',
+            barWidth: 40
+        },
+        {
+            type: 'bar',
+            barWidth: 40
+        }
 
 
         ]
